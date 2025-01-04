@@ -11,6 +11,7 @@ endif()
 list(
   APPEND
   execution_tests
+  exec-on.test
   notify.test
   exec-scounting.test
   exec-awaitable.test
