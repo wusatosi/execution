@@ -8,7 +8,7 @@ This page provides a series of examples showing how to use the
 <details>
 <summary>`"Hello, world"` - synchronous using asynchronous components</summary>
 
-Code: [`examples/intro-1-hello-world.cpp`]()
+@include examples/intro-1-hello-world.cpp
 
 The first example is a very complicated way to a version of `"Hello,
 world"`: it uses components for dealing with asynchronous work to
@@ -21,7 +21,7 @@ The componentes for `std::execution` are declared in the header
 cmponents in namespace `beman::execution` declared in the header
 `<beman/execution/execution.hpp>`:
 
-```c++
+```cpp
 #include <beman/execution/execution.hpp>
 #include <iostream>
 #include <string>
@@ -40,7 +40,7 @@ to point out unusual parts like the use of custom components.
 
 All interesting work happens in the `main` function:
 
-```c++
+```cpp
 int main()
 {
     auto[result] = ex::sync_wait(
@@ -125,6 +125,6 @@ The components used in this example do all of that synchronously:
 <details>
 <summary>`"Hello, async"` - a simple asynchronous example</summary>
 
-Code: [`examples/intro-2-hello-async.cpp`]()
+@include examples/intro-2-hello-async.cpp
 
 </details>
