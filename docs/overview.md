@@ -170,6 +170,7 @@ Requirements for <code>_Scheduler_</code>:
 - <code>std::equality_comparable&lt;_Scheduler_&gt;</code>
 - <code>std::copy_constructible&lt;_Scheduler_&gt;</code>
 </details>
+
 <details>
 <summary><code>sender&lt;<i>Sender</i>&gt;</code></summary>
 
