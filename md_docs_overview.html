@@ -251,7 +251,8 @@ Example</summary>
 <details >
 <summary >
 <code>scheduler&lt;<em>Scheduler</em>&gt;</code></summary>
-<p>Schedulers are used to specify the execution context where the asynchronous work is to be executed. A scheduler is a lightweight handle providing a <code><a href="‘#schedule’">schedule</a></code> operation yielding a <code><a href="‘sender’">sender with a value completion signal</a> without parameters. The completion is on the respective execution context.</code></p>
+<p>Schedulers are used to specify the execution context where the asynchronous work is to be executed.</p>
+<p>A scheduler is a lightweight handle providing a <code><a href="‘#schedule’">schedule</a></code> operation yielding a <code><a href="‘#sender’">sender with a value completion signal</a> without parameters. The completion is on the respective execution context.</code></p>
 <p><code>Requirements for <code><em>Scheduler</em></code>:</p><ul>
 <li>The type <code><em>Scheduler</em>::scheduler_concept</code> is an alias for <code>scheduler_t</code> or a type derived thereof`.</li>
 <li><code><a href="‘#schedule’">schedule</a>(<em>scheduler</em>) -&gt; <a href="‘sender’">sender</a></code></li>
