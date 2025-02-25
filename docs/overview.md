@@ -187,7 +187,7 @@ Typical members for <code>_Sender_</code>:
 - <code>_Sender_::completion_signatures</code> is a type alias for <code><a href=‘completion-signatures’>std::execution::completion_signatures</a>&lt;...&gt;</code> (if there is no <code><a href=‘get_completion_signatures’>get_completion_signatures</a></code> member).
 - <code><a href=‘#connect’>connect</a>(_sender_, <a href=‘#receiver’>receiver</a>) -&gt; <a href=‘#operation-state’>operation_state</a></code>
 
-<detail>
+<details>
 <summary>Example</summary>
 The example shows a sender implementing an operation similar to <code><a href=‘#just’>just</a>(_value)</code>.
 
