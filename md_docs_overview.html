@@ -251,18 +251,16 @@ Example</summary>
 <details >
 <summary >
 <code>scheduler&lt;<em>Scheduler</em>&gt;</code></summary>
-<p>Schedulers are used to specify the execution context where the asynchronous work is to be executed.</p>
-<p>A scheduler is a lightweight handle providing a <code><a href="‘#schedule’">schedule</a></code> operation yielding a <code><a href="‘#sender’">sender with a value completion signal</a> without parameters. The completion is on the respective execution context.</code></p>
-<p><code>Requirements for <code><em>Scheduler</em></code>:</p><ul>
+<p>Schedulers are used to specify the execution context where the asynchronous work is to be executed. A scheduler is a lightweight handle providing a <code><a href="‘#schedule’">schedule</a></code> operation yielding a <code><a href="‘#sender’">sender</a></code> with a value <a href="‘#completion-signal’">completion signal</a> without parameters. The completion is on the respective execution context.</p>
+<p>Requirements for <code><em>Scheduler</em></code>:</p><ul>
 <li>The type <code><em>Scheduler</em>::scheduler_concept</code> is an alias for <code>scheduler_t</code> or a type derived thereof`.</li>
 <li><code><a href="‘#schedule’">schedule</a>(<em>scheduler</em>) -&gt; <a href="‘sender’">sender</a></code></li>
 <li>The <a href="‘#get-completion-scheduler’">value completion scheduler</a> of the <code><a href="‘sender’">sender</a></code>’s <a href="‘#environment’">environment</a> is the <code><em>scheduler</em></code>: <em>scheduler</em> == std::execution::get_completion_scheduler&lt;std::execution::set_value_t&gt;( std::execution::get_env(std::execution::schedule(<em>scheduler</em>)) )</li>
 <li><code>std::equality_comparable&lt;<em>Scheduler</em>&gt;</code></li>
 <li><code>std::copy_constructible&lt;<em>Scheduler</em>&gt;</code> </li>
 </ul>
-<p></code></p>
 </details>
-<p><code></p><details >
+<details >
 <summary >
 <code>sender&lt;<em>Sender</em>&gt;</code></summary>
 <p></p>
@@ -438,12 +436,10 @@ Example</summary>
 </div><!-- fragment --> </details>
 </blockquote>
 </details>
-<p></code></p>
-<p><code></code></p>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Queries</h2>
-<p><code>The queries are used to obtain properties associated with and object. Except <code><a href="‘#forwarding-query’">forwarding_query</a></code> and <code><a href="‘#get-env’">get_env</a></code> the queries work on <a href="‘#environment’">environments</a>.</code></p>
-<p><code></p><details >
+<p>The queries are used to obtain properties associated with and object. Except <code><a href="‘#forwarding-query’">forwarding_query</a></code> and <code><a href="‘#get-env’">get_env</a></code> the queries work on <a href="‘#environment’">environments</a>.</p>
+<details >
 <summary >
 <code>forwarding_query(<em>query</em>) -&gt; bool</code></summary>
 <p></p>
@@ -494,36 +490,29 @@ Queries</h2>
 <code>get_stop_token(<em>env</em>)</code></summary>
 <p></p>
 </details>
-<p></code></p>
-<p><code></code></p>
 <h3><a class="anchor" id="autotoc_md6"></a>
 Customization Point Objects</h3>
-<p><code></p><ul>
+<ul>
 <li><code>connect(<em>sender, receiver</em>) -&gt; <em>operation_state</em></code></li>
 <li><code>set_error(<em>error</em>) noexcept -&gt; void</code></li>
 <li><code>set_stopped(<em>receiver</em>) noexcept -&gt; void</code></li>
 <li><code>set_value(<em>receiver, value...</em>) noexcept -&gt; void</code></li>
 <li><code>start(<em>state&amp;</em>) noexcept -&gt; void</code></li>
 </ul>
-<p></code></p>
-<p><code></code></p>
 <h2><a class="anchor" id="autotoc_md7"></a>
 Senders</h2>
-<p><code> </code></p>
 <h3><a class="anchor" id="autotoc_md8"></a>
 Sender Factories</h3>
-<p><code></p><ul>
+<ul>
 <li><code>just(<em>value...</em>) -&gt; <em>sender-of</em>&lt;set_value_t(<em>Value...</em>)&gt;</code></li>
 <li><code>just_error(<em>error</em>) -&gt; <em>sender-of</em>&lt;set_error_t(<em>Error</em>)&gt;</code></li>
 <li><code>just_stopped() -&gt; <em>sender-of</em>&lt;set_stopped_t()&gt;</code></li>
 <li><code>read_env(<em>query</em>) -&gt; <em>sender-of</em>&lt;set_value_t(<em>query-result</em>)&gt;</code></li>
 <li><code>schedule(<em>scheduler</em>) -&gt; <em>sender-of</em>&lt;set_value_t()&gt;</code></li>
 </ul>
-<p></code></p>
-<p><code></code></p>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Sender Adaptors</h3>
-<p><code></p><ul>
+<ul>
 <li><code>bulk</code></li>
 <li><code>continues_on(<em>sender</em>, <em>scheduler</em>) -&gt; <em>sender</em></code></li>
 <li><code>into_variant(<em>sender</em>) -&gt; <em>sender-of</em>&lt;set_value_t(std::variant&lt;T...&gt;)&gt;</code>`</li>
@@ -542,18 +531,14 @@ Sender Adaptors</h3>
 <li><code>when_all(<em>sender</em>...) -&gt; <em>sender</em></code></li>
 <li><code>when_all_with_variant(<em>sender</em>...) -&gt; <em>sender</em></code></li>
 </ul>
-<p></code></p>
-<p><code></code></p>
 <h3><a class="anchor" id="autotoc_md10"></a>
 Sender Consumers</h3>
-<p><code></p><ul>
+<ul>
 <li><code>sync_wait(<em>sender</em>) -&gt; std::optional&lt;std::tuple&lt;T...&gt;&gt;</code></li>
 </ul>
-<p></code></p>
-<p><code></code></p>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Helpers</h2>
-<p><code></p><ul>
+<ul>
 <li><code>as_awaitable</code></li>
 <li><code>with_awaitable_sender</code></li>
 <li><code>apply_sender</code></li>
@@ -579,16 +564,13 @@ Helpers</h2>
 <li><code>transform_completion_signatures_of</code></li>
 <li><code>value_types_of_t</code></li>
 </ul>
-<p></code></p>
-<p><code></code></p>
 <h2><a class="anchor" id="autotoc_md12"></a>
 Stop Token</h2>
-<p><code></p><ul>
+<ul>
 <li><code>never_stop_token</code></li>
 <li><code>stop_token</code></li>
 <li><code>inplace_stop_token</code> </li>
 </ul>
-<p></code></p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
