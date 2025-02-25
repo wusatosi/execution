@@ -34,23 +34,21 @@ var NAVTREE =
     ] ],
     [ "overview", "md_docs_overview.html", [
       [ "std::execution Overview", "md_docs_overview.html#autotoc_md2", [
-        [ "Terms", "md_docs_overview.html#autotoc_md3", null ],
-        [ "Concepts", "md_docs_overview.html#autotoc_md4", null ],
-        [ "Queries", "md_docs_overview.html#autotoc_md5", [
-          [ "Customization Point Objects", "md_docs_overview.html#autotoc_md6", null ]
+        [ "Queries", "md_docs_overview.html#autotoc_md3", [
+          [ "Customization Point Objects", "md_docs_overview.html#autotoc_md4", null ]
         ] ],
-        [ "Senders", "md_docs_overview.html#autotoc_md7", [
-          [ "Sender Factories", "md_docs_overview.html#autotoc_md8", null ],
-          [ "Sender Adaptors", "md_docs_overview.html#autotoc_md9", null ],
-          [ "Sender Consumers", "md_docs_overview.html#autotoc_md10", null ]
+        [ "Senders", "md_docs_overview.html#autotoc_md5", [
+          [ "Sender Factories", "md_docs_overview.html#autotoc_md6", null ],
+          [ "Sender Adaptors", "md_docs_overview.html#autotoc_md7", null ],
+          [ "Sender Consumers", "md_docs_overview.html#autotoc_md8", null ]
         ] ],
-        [ "Helpers", "md_docs_overview.html#autotoc_md11", null ],
-        [ "Stop Token", "md_docs_overview.html#autotoc_md12", null ]
+        [ "Helpers", "md_docs_overview.html#autotoc_md9", null ],
+        [ "Stop Token", "md_docs_overview.html#autotoc_md10", null ]
       ] ]
     ] ],
     [ "Questions", "md_docs_questions.html", null ],
     [ "resources", "md_docs_resources.html", [
-      [ "Resources Related to <tt>beman::execution</tt>", "md_docs_resources.html#autotoc_md14", null ]
+      [ "Resources Related to <tt>beman::execution</tt>", "md_docs_resources.html#autotoc_md12", null ]
     ] ],
     [ "ToDo", "md_docs_TODO.html", null ],
     [ "Namespaces", "namespaces.html", [
@@ -77,7 +75,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "allocator__aware__move_8hpp_source.html",
-"structbeman_1_1execution_1_1get__env__t.html"
+"structbeman_1_1execution_1_1get__scheduler__t.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

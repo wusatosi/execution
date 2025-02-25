@@ -102,152 +102,6 @@ $(document).ready(function(){initNavTree('md_docs_overview.html',''); initResiza
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md2"></a>
 std::execution Overview</h1>
-<p>This page provides an overview of the components in <code>std::execution</code>. The documentation on this page doesn’t represent all details of the specification. However, it should capture enough details to be a suitable resource to determine how the various components are used.</p>
-<p>For each of the components a summary view is provided. To get more details expand the respective section. </p>
-<h2><a class="anchor" id="autotoc_md3"></a>
-Terms</h2>
-<p>This section defines a few terms used throughout the description on this page. The terms aren’t taken from the specification and are, thus, somewhat informal.</p>
-<details >
-<summary >
-completion signal</summary>
-<p>When an asynchronous operation completes it <em>signals</em> its completion by calling a completion function on a <code><a href="‘#receiver’">receiver</a></code>:</p>
-<ul>
-<li><code><a href="‘#set-value’">std::execution::set_value</a>(<em>receiver</em>, <em>args</em>...)</code> is called when an operation completes successfully. A call to this completion function is referred to as <em>value completion signal</em>.</li>
-<li><code><a href="‘#set-error’">std::execution::set_error</a>(<em>receiver</em>, <em>error</em>)</code> is called when an operation fails to deliver its success results. A call to this completion function is referred to as <em>error completion signal</em>.</li>
-<li><code><a href="‘#set-stopped’">std::execution::set_stopped</a>()</code> is called when an operation was cancelled. A call to this completion function is referred to as <em>cancellation completion signal</em>.</li>
-<li>Collectively the value, error, and cancellation completion signals are referred to as <em>completion signal</em>. Note that any <code><a href="‘#start’">start</a></code>ed asynchronous operation triggers exactly one completion signal. </li>
-</ul>
-</details>
-<details >
-<summary >
-environment</summary>
-<p>The term <em>enviroment</em> refers to the bag of properties associated with an <code><em>object</em></code> by the call <code><a href="‘#get-env’">std::execution::get_env</a>(<em>object</em>)</code>. By default the environment for objects is empty (<code><a href="‘#empty-env’">std::execution::empty_env</a></code>). In particular, environments associated with <code><a href="‘#receiver’">receiver</a></code>s are used to provide access to properties like the <a href="‘#get-stop-token’">stop token</a>, <a href="‘#get-scheduler’">scheduler</a>, or <a href="‘#get-allocator’">allocator</a> associated with the <code><a href="‘#receiver’">receiver</a></code>. The various properties associated with an object are accessed via <a href="‘#queries’">queries</a>. </p>
-</details>
-<h2><a class="anchor" id="autotoc_md4"></a>
-Concepts</h2>
-<p>This section lists the concepts from <code>std::execution</code>.</p>
-<details >
-<summary >
-<code>operation_state&lt;<em>State</em>&gt;</code></summary>
-<p></p>
-<p>Operation states represent asynchronous operations ready to be <code><a href="‘#start’">start</a></code>ed or executing. Operation state objects are normally neither movable nor copyable. Once <code><a href="‘#start’">start</a></code>ed the object needs to be kept alive until a <a href="‘#completion-signal’">completion signal</a> is received. Users don’t interact with operation states explicitly except when implementing new sender algorithms.</p>
-<p>Required members for <code><em>State</em></code>:</p>
-<ul>
-<li>The type <code>operation_state_concept</code> is an alias for <code>operation_state_t</code> or a type derived thereof.</li>
-<li><code><em>state</em>.<a href="‘#start’">start</a>() &amp; noexcept</code></li>
-</ul>
-<details >
-<summary >
-Example</summary>
-<p></p>
-<p>This example shows a simple operation state object which immediately completes successfully without any values (as <code><a href="‘#just’"></a>()</code> would do). Normally <code><a href="‘#start’">start</a>()</code> initiates an asynchronous operation completing at some point later.</p>
-<div class="fragment"><div class="line"> {c++}</div>
-<div class="line">template &lt;std::execution::receiver Receiver&gt;</div>
-<div class="line">struct example_state</div>
-<div class="line">{</div>
-<div class="line">    using operation_state_concept = std::execution::operation_state_t;</div>
-<div class="line">    std::remove_cvref_t&lt;Receiver&gt; receiver;</div>
-<div class="line"> </div>
-<div class="line">    auto start() &amp; noexcept {</div>
-<div class="line">        std::execution::set_value(std::move(this-&gt;receiver));</div>
-<div class="line">    }</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line">static_assert(std::execution::operation_state&lt;example_state&lt;SomeReceiver&gt;&gt;);</div>
-</div><!-- fragment --> </details>
-</details>
-<details >
-<summary >
-<code>receiver&lt;<em>Receiver</em>&gt;</code></summary>
-<p></p>
-<p>Receivers are used to receive <a href="‘#completion-signal’">completion signals</a>: when an asynchronous operation completes the corresponding <a href="‘#completion-signal’">completion signal</a> is called with the appropriate arguments. In addition receivers provide access to the <a href="‘#environment’">environment</a> for the operation via the <a href="‘#get-env’"><code>get_env</code></a> method. Users don’t interact with receivers explicitly except when implementing new sender algorithms.</p>
-<p>Required members for <code><em>Receiver</em></code>:</p>
-<ul>
-<li>The type <code>receiver_concept</code> is an alias for <code>receiver_t</code> or a type derived thereof`.</li>
-<li>Rvalues of type <code><em>Receiver</em></code> are movable.</li>
-<li>Lvalues of type <code><em>Receiver</em></code> are copyable.</li>
-<li><code><a href="‘#get-env’">std::execution::get_env</a>(<em>receiver</em>)</code> returns an object. By default this operation returns <code><a href="‘empty-env’">std::execution::empty_env</a></code>.</li>
-</ul>
-<p>Typical members for <code><em>Receiver</em></code>:</p>
-<ul>
-<li><code><a href="‘get_env’">get_env</a>() const noexcept</code></li>
-<li><code><a href="‘set_value’">set_value</a>(args…) &amp;&amp; noexcept -&gt; void</code></li>
-<li><code><a href="‘set_error’">set_error</a>(error) &amp;&amp; noexcept -&gt; void</code></li>
-<li><code><a href="‘set_stopped’">set_stopped</a>() &amp;&amp; noexcept -&gt; void</code></li>
-</ul>
-<details >
-<summary >
-Example</summary>
-<p></p>
-<p>The example receiver prints the name of each the received <a href="‘#completion-signal’">completion signal</a> before forwarding it to a receiver. It forwards the request for an environment (<code><a href="‘#get_env’">get_env</a></code>) to the nested receiver. This example is resembling a receiver as it would be used by a sender injecting logging of received signals.</p>
-<div class="fragment"><div class="line"> {c++}</div>
-<div class="line">template &lt;std::execution::receiver NestedReceiver&gt;</div>
-<div class="line">struct example_receiver</div>
-<div class="line">{</div>
-<div class="line">    using receiver_concept = std::execution::receiver_t;</div>
-<div class="line">    std::remove_cvref_t&lt;NestedReceiver&gt; nested;</div>
-<div class="line"> </div>
-<div class="line">    auto get_env() const noexcept {</div>
-<div class="line">        return std::execution::get_env(this-&gt;nested);</div>
-<div class="line">    }</div>
-<div class="line">    template &lt;typename… A&gt;</div>
-<div class="line">    auto set_value(A&amp;&amp;… a) &amp;&amp; noexcept -&gt; void {</div>
-<div class="line">        std::cout &lt;&lt; “set_value\n”;</div>
-<div class="line">        std::execution::set_value(std::move(this-&gt;nested), std::forward&lt;A&gt;(a)…);</div>
-<div class="line">    }</div>
-<div class="line">    template &lt;typename E&gt;</div>
-<div class="line">    auto set_error(E&amp;&amp; e) &amp;&amp; noexcept -&gt; void {</div>
-<div class="line">        std::cout &lt;&lt; “set_error\n”;</div>
-<div class="line">        std::execution::set_error(std::move(this-&gt;nested), std::forward&lt;E&gt;(e));</div>
-<div class="line">    }</div>
-<div class="line">    auto set_stopped() &amp;&amp; noexcept -&gt; void {</div>
-<div class="line">        std::cout &lt;&lt; “set_stopped\n”;</div>
-<div class="line">        std::execution::set_stopped(std::move(this-&gt;nested));</div>
-<div class="line">    }</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line">static_assert(std::execution::receiver&lt;example_receiver&lt;SomeReceiver&gt;&gt;);</div>
-</div><!-- fragment --> </details>
-</details>
-<details >
-<summary >
-<code>receiver_of&lt;<em>Receiver, Completions</em>&gt;</code></summary>
-<p></p>
-<p>The concept <code>receiver_of&lt;<em>Receiver, Completions</em>&gt;</code> tests whether <code><a href="‘#receiver’">std::execution::receiver</a>&lt;<em>Receiver</em>&gt;</code> is true and if an object of type <code><em>Receiver</em></code> can be invoked with each of the <a href="‘#completion-signal’">completion signals</a> in <code><em>Completions</em></code>.</p>
-<details >
-<summary >
-Example</summary>
-<p></p>
-<p>The example defines a simple <code><a href="‘#receiver’">receiver</a></code> and tests whether it models <code>receiver_of</code> with different <a href="‘#completion-signal’">completion signals</a> in <code><em>Completions</em></code> (note that not all cases are true).</p>
-<div class="fragment"><div class="line"> {c++}</div>
-<div class="line">struct example_receiver</div>
-<div class="line">{</div>
-<div class="line">    using receiver_concept = std::execution::receiver_t;</div>
-<div class="line"> </div>
-<div class="line">    auto set_value(int) &amp;&amp; noexcept -&gt;void {}</div>
-<div class="line">    auto set_stopped() &amp;&amp; noexcept -&gt;void {}</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">// matching the exact signals models receiver_of:</div>
-<div class="line">static_assert(std::execution::receiver_of&lt;example_receiver,</div>
-<div class="line">    std::execution::completion_signals&lt;</div>
-<div class="line">        std::execution::set_value_t(int),</div>
-<div class="line">        std::execution::set_stopped_t()</div>
-<div class="line">    &gt;);</div>
-<div class="line">// providing a superset of signal models models receiver_of:</div>
-<div class="line">static_assert(std::execution::receiver_of&lt;example_receiver,</div>
-<div class="line">    std::execution::completion_signals&lt;</div>
-<div class="line">        std::execution::set_value_t(int)</div>
-<div class="line">    &gt;);</div>
-<div class="line">// providing only a subset of signals doesn’t model receiver_of:</div>
-<div class="line">static_assert(not std::execution::receiver_of&lt;example_receiver,</div>
-<div class="line">    std::execution::completion_signals&lt;</div>
-<div class="line">        std::execution::set_value_t(),</div>
-<div class="line">        std::execution::set_value_t(int)</div>
-<div class="line">    &gt;);</div>
-</div><!-- fragment --> </details>
-</details>
 <details >
 <summary >
 <code>scheduler&lt;<em>Scheduler</em>&gt;</code></summary>
@@ -440,7 +294,7 @@ Example</summary>
 </details>
 <p></code></p>
 <p><code></code></p>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md3"></a>
 Queries</h2>
 <p><code>The queries are used to obtain properties associated with and object. Except <code><a href="‘#forwarding-query’">forwarding_query</a></code> and <code><a href="‘#get-env’">get_env</a></code> the queries work on <a href="‘#environment’">environments</a>.</code></p>
 <p><code></p><details >
@@ -496,7 +350,7 @@ Queries</h2>
 </details>
 <p></code></p>
 <p><code></code></p>
-<h3><a class="anchor" id="autotoc_md6"></a>
+<h3><a class="anchor" id="autotoc_md4"></a>
 Customization Point Objects</h3>
 <p><code></p><ul>
 <li><code>connect(<em>sender, receiver</em>) -&gt; <em>operation_state</em></code></li>
@@ -507,10 +361,10 @@ Customization Point Objects</h3>
 </ul>
 <p></code></p>
 <p><code></code></p>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Senders</h2>
 <p><code> </code></p>
-<h3><a class="anchor" id="autotoc_md8"></a>
+<h3><a class="anchor" id="autotoc_md6"></a>
 Sender Factories</h3>
 <p><code></p><ul>
 <li><code>just(<em>value...</em>) -&gt; <em>sender-of</em>&lt;set_value_t(<em>Value...</em>)&gt;</code></li>
@@ -521,7 +375,7 @@ Sender Factories</h3>
 </ul>
 <p></code></p>
 <p><code></code></p>
-<h3><a class="anchor" id="autotoc_md9"></a>
+<h3><a class="anchor" id="autotoc_md7"></a>
 Sender Adaptors</h3>
 <p><code></p><ul>
 <li><code>bulk</code></li>
@@ -544,14 +398,14 @@ Sender Adaptors</h3>
 </ul>
 <p></code></p>
 <p><code></code></p>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md8"></a>
 Sender Consumers</h3>
 <p><code></p><ul>
 <li><code>sync_wait(<em>sender</em>) -&gt; std::optional&lt;std::tuple&lt;T...&gt;&gt;</code></li>
 </ul>
 <p></code></p>
 <p><code></code></p>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Helpers</h2>
 <p><code></p><ul>
 <li><code>as_awaitable</code></li>
@@ -581,7 +435,7 @@ Helpers</h2>
 </ul>
 <p></code></p>
 <p><code></code></p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Stop Token</h2>
 <p><code></p><ul>
 <li><code>never_stop_token</code></li>
